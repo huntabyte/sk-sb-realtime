@@ -15,6 +15,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
+		"@supabase/auth-helpers-sveltekit": "^0.8.7",
 		"@sveltejs/adapter-auto": "^1.0.0",
 		"@sveltejs/kit": "^1.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
@@ -37,5 +38,8 @@
 		"vite": "^4.0.0",
 		"vitest": "^0.25.3"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@supabase/supabase-js": "^2.5.0"
+	}
 }
