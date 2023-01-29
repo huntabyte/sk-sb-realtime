@@ -14,16 +14,19 @@ export interface Database {
           content: string
           created_at: string | null
           id: number
+          room_id: number
         }
         Insert: {
           content: string
           created_at?: string | null
           id?: number
+          room_id: number
         }
         Update: {
           content?: string
           created_at?: string | null
           id?: number
+          room_id?: number
         }
       }
       profiles: {
@@ -64,26 +67,6 @@ export interface Database {
         Update: {
           room_id?: number
           user_id?: string
-        }
-      }
-      room_messages: {
-        Row: {
-          created_at: string
-          id: number
-          message_id: number
-          room_id: number
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          message_id: number
-          room_id?: number
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          message_id?: number
-          room_id?: number
         }
       }
       rooms: {

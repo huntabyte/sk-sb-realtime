@@ -5,11 +5,11 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-	Rooms:
+	<h2 class="font-bold">Rooms</h2>
 	{#each data.rooms as room}
 		<div>
 			<a href="/rooms/{room.id}">
-				{room.name}
+				🚪{room.name}
 			</a>
 		</div>
 	{/each}

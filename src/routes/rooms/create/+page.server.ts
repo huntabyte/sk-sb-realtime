@@ -10,8 +10,6 @@ export const actions: Actions = {
 			name: string
 		}
 
-		console.log(await locals.sb.auth.getUser())
-
 		const room = await locals.sb
 			.from("rooms")
 			.insert([{ name, user_id: locals.session.user.id }])

@@ -1,42 +1,35 @@
 import { error, fail } from "@sveltejs/kit"
 import type { Actions, PageServerLoad } from "./$types"
-import { z, ZodError } from "zod"
-
-const roomMessagesSchema = z.array(
-	z.object({
-		created_at: z.string(),
-		id: z.number(),
-		message_id: z.number(),
-		room_id: z.number(),
-		messages: z.object({
-			content: z.string(),
-		}),
-	}),
-)
 
 export const load: PageServerLoad = async ({ locals, params }) => {
+	console.log("load func hit")
 	const getMessages = async (roomId: number) => {
 		const messages = await locals.sb
-			.from("room_messages")
-			.select("*, messages(content)")
+			.from("messages")
+			.select("*")
 			.eq("room_id", roomId)
 			.order("created_at", { ascending: true })
-		console.log(messages.data)
 		if (messages.error) {
 			throw error(500, { message: messages.error.message })
 		}
-		try {
-			return roomMessagesSchema.parse(messages.data)
-		} catch (e) {
-			if (e instanceof ZodError) {
-				console.log(e)
-			}
-			return []
+		return messages.data
+	}
+
+	const getRoom = async (roomId: number) => {
+		const room = await locals.sb
+			.from("rooms")
+			.select()
+			.eq("id", roomId)
+			.single()
+		if (room.error) {
+			throw error(500, { message: room.error.message })
 		}
+		return room.data
 	}
 
 	return {
 		messages: getMessages(Number(params.roomId)),
+		room: getRoom(Number(params.roomId)),
 	}
 }
 
@@ -48,7 +41,7 @@ export const actions: Actions = {
 
 		const roomMessage = await locals.sb
 			.from("messages")
-			.insert([{ content: message }])
+			.insert([{ content: message, room_id: Number(params.roomId) }])
 			.select()
 			.single()
 
@@ -56,19 +49,9 @@ export const actions: Actions = {
 			return fail(400, { message: "Could not send message" })
 		}
 
-		const roomMessageRelation = await locals.sb
-			.from("room_messages")
-			.insert([
-				{ room_id: Number(params.roomId), message_id: roomMessage.data.id },
-			])
-
-		if (roomMessageRelation.error) {
-			await locals.sb.from("messages").delete().eq("id", roomMessage.data.id)
-			return fail(400, { message: "Could not send message" })
-		}
-
 		return {
 			status: 201,
+			body: roomMessage.data,
 		}
 	},
 }

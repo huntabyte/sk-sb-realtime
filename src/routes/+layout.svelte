@@ -1,26 +1,16 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation'
-	import { supabaseClient } from '$lib/supabase'
-	import { onMount } from 'svelte'
 	import '../app.css'
-
-	onMount(() => {
-		const {
-			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
-			console.log('Auth state change detected')
-			invalidateAll()
-		})
-
-		return () => {
-			subscription.unsubscribe()
-		}
-	})
 </script>
 
 <div class="container mx-auto">
-	<form action="/logout" method="POST" class="w-full bg-gray-700 mb-8">
-		<button type="submit" class="text-white">Logout</button>
-	</form>
+	<div class="flex items-center gap-2 justify-between">
+		<div class="flex gap-2 items-center">
+			<a href="/">Home</a>
+			<a href="/rooms">Rooms</a>
+		</div>
+		<form action="/logout" method="POST" class="">
+			<button type="submit">Logout</button>
+		</form>
+	</div>
 	<slot />
 </div>

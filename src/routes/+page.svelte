@@ -48,8 +48,6 @@
 			await update()
 		}
 	}
-
-	$: console.log(messages)
 </script>
 
 <div class="flex flex-col mx-auto">
