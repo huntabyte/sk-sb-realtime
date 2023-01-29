@@ -1,7 +1,9 @@
 <script lang="ts">
 	import '../app.css'
+	import { Toaster } from 'svelte-french-toast'
 </script>
 
+<Toaster />
 <div class="container mx-auto">
 	<div class="flex items-center gap-2 justify-between">
 		<div class="flex gap-2 items-center">

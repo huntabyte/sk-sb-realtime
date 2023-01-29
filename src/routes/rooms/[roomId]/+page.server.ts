@@ -1,8 +1,11 @@
-import { error, fail } from "@sveltejs/kit"
+import { error, fail, redirect } from "@sveltejs/kit"
 import type { Actions, PageServerLoad } from "./$types"
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	console.log("load func hit")
+	if (!locals.session) {
+		throw redirect(302, "/login")
+	}
+
 	const getMessages = async (roomId: number) => {
 		const messages = await locals.sb
 			.from("messages")
