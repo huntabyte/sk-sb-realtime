@@ -6,11 +6,18 @@
 
 	let channel: RealtimeChannel
 
+	interface Payload {
+		[key: string]: any
+		event: string
+		type: 'broadcast'
+	}
+
 	let messages: string[] = []
+
 	onMount(async () => {
 		channel = supabaseClient
 			.channel('room1')
-			.on('broadcast', { event: 'message' }, ({ payload }) => {
+			.on('broadcast', { event: 'message' }, ({ payload }: Payload) => {
 				console.log(payload)
 				messages.push(payload.message)
 				messages = messages
@@ -45,16 +52,18 @@
 	$: console.log(messages)
 </script>
 
-<h1 class="text-2xl font-bold">SvelteKit Tailwind Starter</h1>
-<div class="flex w-full justify-between max-w-xl mx-auto">
-	<div>
-		<h1>Messages:</h1>
-		{#each messages as message}
-			<p>{message}</p>
-		{/each}
+<div class="flex flex-col mx-auto">
+	<h1 class="text-2xl font-bold">Chatly</h1>
+	<div class="flex w-full justify-between max-w-xl">
+		<div class="flex flex-col space-y-2">
+			<h1>Messages:</h1>
+			{#each messages as message}
+				<p>{message}</p>
+			{/each}
+		</div>
+		<form action="?/sendMessage" use:enhance={submitMessage} method="POST">
+			<input type="text" name="message" class="border-2 border-gray-500 p-2 " />
+			<button type="submit" class="bg-cyan-600  p-2">Send</button>
+		</form>
 	</div>
-	<form action="?/sendMessage" use:enhance={submitMessage} method="POST">
-		<input type="text" name="message" />
-		<button type="submit">Send</button>
-	</form>
 </div>

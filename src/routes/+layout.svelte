@@ -18,4 +18,9 @@
 	})
 </script>
 
-<slot />
+<div class="container mx-auto">
+	<form action="/logout" method="POST" class="w-full bg-gray-700 mb-8">
+		<button type="submit" class="text-white">Logout</button>
+	</form>
+	<slot />
+</div>

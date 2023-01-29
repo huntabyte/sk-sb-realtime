@@ -4,9 +4,14 @@
 
 import type { TypedSupabaseClient } from "@supabase/auth-helpers-sveltekit/dist/types"
 import type { Session } from "@supabase/supabase-js"
+import type { Database } from "$lib/supabase.types"
 
 declare global {
 	declare namespace App {
+		interface Supabase {
+			Database: Database
+			SchemaName: "public"
+		}
 		// interface Error {}
 		interface Locals {
 			sb: TypedSupabaseClient
